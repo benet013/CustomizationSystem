@@ -23,14 +23,21 @@ font pango:monospace 8
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
 
-#screenshot config
-exec --no-startup-id picom
-bindsym Print exec maim -s | xclip -selection clipboard -t image/png
-bindsym Shift+Print exec maim | xclip -selection clipboard -t image/png
+#border
+#default_border pixel 0
+#default_floating_border pixel 0
+exec_always --no-startup-id picom --config ~/.config/picom/picom.conf
 
-#brighness config
-bindcode 71 exec brightnessctl -d nvidia_0 set 5%-
-bindcode 72 exec brightnessctl -d nvidia_0 set +5%
+# screenshot config
+bindsym Print exec --no-startup-id ~/scripts/screenshot.sh
+bindsym Shift+Print exec --no-startup-id maim | xclip -selection clipboard -t image/png
+
+# brightness config
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +5%
+
+#workspace kill config
+bindsym $mod+Shift+x exec xkill
 
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
@@ -193,9 +200,20 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
+# finds out, if available
 bar {
     status_command i3status
+
+    colors {
+        background #000000
+        statusline #cdd6f4
+        separator  #6c7086
+
+        focused_workspace  #89b4fa #000000 #cdd6f4
+        active_workspace   #313244 #000000 #cdd6f4
+        inactive_workspace #000000 #000000 #6c7086
+        urgent_workspace   #f38ba8 #000000 #ffffff
+    }
 }
 
 #wallpaper
@@ -203,3 +221,6 @@ exec_always --no-startup-id feh --bg-fill ~/Downloads/wallhaven-polrjp_1920x1080
 
 #bluetooth
 bindsym $mod+b exec blueman-manager
+
+#notes
+bindsym $mod+m exec mousepad
